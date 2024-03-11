@@ -30,7 +30,7 @@ sudo ./setup.sh
 DDH runs in the background, automatically detecting connected displays and managing their settings. It also automatically optimizes the display refresh rate when the system is running on battery power to save energy.
 
 ## Configuration
-DDH uses a configuration file that is created during installation. You can modify this file to customize DDH's behavior. The configuration file is located at ~/.config/ddh/config.ini.
+DDH uses a configuration file that is created during installation. You can modify this file to customize DDH's behavior. The configuration file is located at `~/.config/ddh/config.ini`.
 
 ## License
 DDH is distributed under the GNU General Public License v3.0. See the LICENSE file for additional information.
