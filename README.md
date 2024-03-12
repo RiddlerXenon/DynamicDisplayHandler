@@ -14,17 +14,40 @@ git clone https://github.com/RiddlerXenon/DynamicDisplayHandler
 cd DynamicDisplayHandler
 ```
 
-3. Make setup.sh executable:
+3. Make install.sh executable:
 
 ```bash
-sudo chmod +x setup.sh
+sudo chmod +x install.sh
 ```
 
-4. Run setup.sh for automatic setup and installation of DDH:
+4. Run install.sh for automatic setup and installation of DDH:
 
 ```bash
-sudo ./setup.sh
+sudo ./install.sh
 ```
+
+## Uninstallation
+To uninstall DDH, follow these steps:
+
+1. Navigate to the repository directory:
+
+```bash
+cd <repository name>    
+```
+
+2. Make uninstall.sh executable:
+
+```bash
+sudo chmod +x uninstall.sh
+```
+
+3. Run uninstall.sh to uninstall DDH:
+
+```bash
+sudo ./uninstall.sh
+```
+
+This will remove DDH and its configuration files from your system.
 
 ## Usage
 DDH runs in the background, automatically detecting connected displays and managing their settings. It also automatically optimizes the display refresh rate when the system is running on battery power to save energy.

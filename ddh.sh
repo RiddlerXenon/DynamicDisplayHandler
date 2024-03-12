@@ -103,5 +103,5 @@ while true; do
         sed -i "s/AC=.*$/AC=$current_power/" "$config_file"
     fi
 
-    sleep 5
+    sleep 2
 done
