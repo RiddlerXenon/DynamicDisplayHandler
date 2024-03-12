@@ -11,6 +11,7 @@ These scripts require:
 Ensure all these are installed before running the scripts.
 
 ## Installation
+### Manual
 1. Clone this repository:
 
 ```bash
@@ -34,8 +35,15 @@ sudo chmod +x install.sh
 ```bash
 sudo ./install.sh
 ```
+### Arch Linux
+Installing via AUR:
+
+```bash 
+yay -S ddh
+```
 
 ## Uninstallation
+### Manual
 To uninstall DDH, follow these steps:
 
 1. Navigate to the repository directory:
@@ -57,6 +65,14 @@ sudo ./uninstall.sh
 ```
 
 This will remove DDH and its configuration files from your system.
+
+### Arch Linux
+Uninstalling:
+
+```bash 
+yay -R ddh
+```
+
 
 ## Usage
 DDH runs in the background, automatically detecting connected displays and managing their settings. It also automatically optimizes the display refresh rate when the system is running on battery power to save energy.
