@@ -1,6 +1,15 @@
 # DDH: Dynamic Display Handler
 DDH is a Bash script for Arch Linux systems that automatically manages external displays and optimizes refresh rate when running on battery power.
 
+## Dependencies
+These scripts require:
+
+- Xorg
+- systemd
+- Standard utilities: awk, grep, sed
+
+Ensure all these are installed before running the scripts.
+
 ## Installation
 1. Clone this repository:
 
