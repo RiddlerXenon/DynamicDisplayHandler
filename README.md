@@ -57,3 +57,11 @@ DDH uses a configuration file that is created during installation. You can modif
 
 ## License
 DDH is distributed under the GNU General Public License v3.0. See the LICENSE file for additional information.
+
+## Support
+
+If you find this project helpful, consider supporting it by sending some Ether. It's like buying me a coffee!
+
+[![Buy me a coffee](https://cdn.buymeacoffee.com/buttons/default-orange.png)](#)
+
+Ethereum Address: `0xb51A27fF50e0E61E7626d2f99255A65Bc9B92e22`
