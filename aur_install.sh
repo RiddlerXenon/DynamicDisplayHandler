@@ -96,7 +96,7 @@ service_name="ddh"
 
 sudo echo "[Unit]
 Description=DynamicDisplayHandler
-After=multi-user.target
+After=display-manager.service
 
 [Service]
 User=$(logname)
