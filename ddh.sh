@@ -13,6 +13,7 @@ declare -A config # Associative array to store config values
 config_file="$HOME/.config/ddh/config.ini"
 ac_dir=$(ls /sys/class/power_supply/ | grep -P "AC")
 
+
 # Function to read config file
 function read_config() {
     section=""
@@ -93,23 +94,57 @@ while true; do
 
     # Check if the current displays are the same as the config file
     # If not, set the displays to the config file values
-    if [[ ${current_displays[*]} != $displays ]]; then
+    if [[ ${current_displays[*]} != ${displays[*]} ]]; then
+        declare -A nresolutions
+        declare -A nrefresh_rates
+        declare -A nmax_refresh_rates
+
         for index in "${!current_displays[@]}"; do
             display=${current_displays[$index]}
-            pos=$(printf "%s" "${config[DISPLAYS_POSITIONS]}" | tr -d '[:space:]')
-            # If the current display is not in the config file, set it to the default position
+            max_resolution=$(xrandr | grep -P "^$display" -A1 | tail -n1 | awk '{print $1}')
+            rates=($(xrandr -q | grep -P "^$display" -A1 | tail -n 1 | awk '{$1=""; print $0}' | sed 's/^ *//' | tr -dc '0-9. '))
+            max_refresh_rate=$(echo ${rates[@]} | tr ' ' '\n' | sort -n | tail -n 1)
+
+            closest_refresh_rate=$(echo ${rates[@]} | tr ' ' '\n' | sort -n | awk -v target=60 'function abs(x){return ((x < 0) ? -x : x)} BEGIN{min=1e9}{
+                if (abs($1-target)<min) {
+                    min=abs($1-target)
+                    val=$1
+                }
+            }END{print val}')
+
+            abs() {
+                if [ $1 -lt 0 ]; then
+                    echo "$((-1 * $1))"
+                else
+                    echo "$1"
+                fi
+            }
+            
+            nresolutions[$display]=$max_resolution
+            nrefresh_rates[$display]=$closest_refresh_rate
+            nmax_refresh_rates[$display]=$max_refresh_rate
+
+            pos=${config[DISPLAYS_POSITIONS]}
+
             if [[ $index != 0 ]]; then
                 if [[ $pos == "right-of" ]]; then
-                    xrandr --output "$display" --mode "${resolutions[index]}" --rate "${max_refresh_rates[index]}" --right-of "${displays[index-1]}"
+                    xrandr --output "$display" --mode "${max_resolution}" --rate "${max_refresh_rate}" --right-of "${displays[index-1]}"
                 else
-                    xrandr --output "$display" --mode "${resolutions[index]}" --rate "${max_refresh_rates[index]}" --left-of "${displays[index-1]}"
+                    xrandr --output "$display" --mode "${max_resolution}" --rate "${max_refresh_rate}" --left-of "${displays[index-1]}"
                 fi
             else
-                xrandr --output "$display" --mode "${resolutions[index]}" --rate "${max_refresh_rates[index]}" --primary
+                xrandr --output "$display" --mode "${max_resolution}" --rate "${max_refresh_rate}" --primary
             fi
         done
 
+        nresolutions_rev=($(echo ${nresolutions[*]} | tr ' ' '\n' | tac | tr '\n' ' '))
+        nrefresh_rates_rev=($(echo ${nrefresh_rates[*]} | tr ' ' '\n' | tac | tr '\n' ' '))
+        nmax_refresh_rates_rev=($(echo ${nmax_refresh_rates[*]} | tr ' ' '\n' | tac | tr '\n' ' '))
+
         sed -i "s/DISPLAYS=.*$/DISPLAYS=${current_displays[*]}/" "$config_file"
+        sed -i "s/RESOLUTIONS=.*$/RESOLUTIONS=${nresolutions_rev[*]}/" "$config_file"
+        sed -i "s/REFRESH_RATES=.*$/REFRESH_RATES=${nrefresh_rates_rev[*]}/" "$config_file"
+        sed -i "s/MAX_REFRESH_RATES=.*$/MAX_REFRESH_RATES=${nmax_refresh_rates_rev[*]}/" "$config_file"
     fi
 
     # Check if the current power status is the same as the config file
